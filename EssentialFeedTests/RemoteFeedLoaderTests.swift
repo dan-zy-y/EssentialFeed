@@ -5,25 +5,8 @@
 //  Created by Daniil Zadorozhnyy on 08.04.2022.
 //
 
-import Foundation
 import XCTest
-
-class RemoteFeedLoader {
-    let client: HTTPClient
-    let url: URL
-    init(url: URL = URL(string: "https://a-url.com")!, client: HTTPClient) {
-        self.url = url
-        self.client = client
-    }
-    
-    func load() {
-        client.get(from: url)
-    }
-}
-
-protocol HTTPClient {
-    func get(from url: URL)
-}
+import EssentialFeed
 
 class HTTPClientSpy: HTTPClient {
     var requestedURL: URL?
@@ -50,6 +33,8 @@ class RemoteFeedLoaderTests: XCTestCase {
         sut.load()
         XCTAssertNotNil(client.requestedURL)
     }
+    
+    // MARK: - Helpers
     
     func makeSUT(url: URL) -> (RemoteFeedLoader, HTTPClientSpy) {
         let client = HTTPClientSpy()
