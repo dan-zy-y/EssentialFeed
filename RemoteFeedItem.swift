@@ -13,12 +13,12 @@ struct RemoteFeedItem: Decodable {
     var location: String?
     var image: URL
     
-    var item: FeedItem {
-        return FeedItem(
+    var item: FeedImage {
+        return FeedImage(
             id: id,
             description: description,
             location: location,
-            imageURL: image
+            url: image
         )
     }
 }
