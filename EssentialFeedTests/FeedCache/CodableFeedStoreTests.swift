@@ -60,7 +60,7 @@ class CodableFeedStoreTests: XCTestCase {
         
         try! "Invalid data".write(to: storeURL, atomically: true, encoding: .utf8)
         
-        expect(sut, toRetrieve: .failure(error: anyNSError()))
+        expect(sut, toRetrieve: .failure(anyNSError()))
     }
     
     func test_retrieve_hasNoSideEffectsOnFailure() {
@@ -69,7 +69,7 @@ class CodableFeedStoreTests: XCTestCase {
         
         try! "Invalid data".write(to: storeURL, atomically: true, encoding: .utf8)
         
-        expect(sut, toRetrieveTwice: .failure(error: anyNSError()))
+        expect(sut, toRetrieveTwice: .failure(anyNSError()))
     }
     
     func test_insert_overridesPreviouslyInsertedCacheValues() {
@@ -116,7 +116,7 @@ class CodableFeedStoreTests: XCTestCase {
     }
     
     func test_delete_deliversErrorOnDeletionError() {
-        let sut = makeSUT(storeURL: cachesDirectory())
+        let sut = makeSUT(storeURL: noDeletePermissionURL())
         insert(cache: (uniqueImageFeed().local, Date()), to: sut)
         
         let deletionError = deleteCache(from: sut)
@@ -216,7 +216,7 @@ class CodableFeedStoreTests: XCTestCase {
             exp.fulfill()
         }
     
-        wait(for: [exp], timeout: 1.0)
+        wait(for: [exp], timeout: 2.0)
     }
     
     private func setUpEmptyStoreState() {
@@ -237,5 +237,9 @@ class CodableFeedStoreTests: XCTestCase {
 
     private func cachesDirectory() -> URL {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+    }
+    
+    private func noDeletePermissionURL() -> URL {
+        return FileManager.default.urls(for: .cachesDirectory, in: .systemDomainMask).first!
     }
 }
