@@ -10,9 +10,11 @@ import CoreData
 public class CoreDataFeedStore: FeedStore {
     
     private let persistentContainer: NSPersistentContainer
+    private let context: NSManagedObjectContext
     
     public init(bundle: Bundle = .main) throws {
         self.persistentContainer = try NSPersistentContainer.load(modelName: "FeedStore", in: bundle)
+        self.context = persistentContainer.newBackgroundContext()
     }
     
     public func retrieve(completion: @escaping RetrievalCompletion) {
