@@ -5,7 +5,6 @@
 //  Created by Daniil Zadorozhnyy on 07.08.2022.
 //
 
-import Foundation
 import CoreData
 
 extension NSPersistentContainer {
