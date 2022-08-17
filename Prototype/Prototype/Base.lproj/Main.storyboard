@@ -122,6 +122,12 @@ Label</string>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="My Feed" id="83R-Jf-c8d"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="8yM-Zn-XyX">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="refresh" destination="a0I-XE-JJh" eventType="valueChanged" id="dc8-9J-ZXE"/>
+                        </connections>
+                    </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BTe-Zj-AvC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
