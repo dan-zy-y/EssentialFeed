@@ -55,6 +55,7 @@
 		B0FAF85828AD902F00FBE112 /* EssentialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B066AB8227FF6C4A00DE2FA0 /* EssentialFeed.framework */; platformFilter = ios; };
 		B0FAF85928AD902F00FBE112 /* EssentialFeed.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B066AB8227FF6C4A00DE2FA0 /* EssentialFeed.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B0FAF85D28AD912000FBE112 /* XCTTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01909D8280A206E00B57841 /* XCTTestCase+MemoryLeakTracking.swift */; };
+		B0FAF85F28B1152400FBE112 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FAF85E28B1152400FBE112 /* FeedViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -154,6 +155,7 @@
 		B0FAF84628AC42C800FBE112 /* EssentialFeediOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialFeediOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0FAF85428AD8BBA00FBE112 /* EssentialFeediOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EssentialFeediOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		B0FAF85528AD8BBA00FBE112 /* FeedViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewControllerTests.swift; sourceTree = "<group>"; };
+		B0FAF85E28B1152400FBE112 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -381,6 +383,7 @@
 			isa = PBXGroup;
 			children = (
 				B0FAF84028AC42C800FBE112 /* EssentialFeediOS.docc */,
+				B0FAF85E28B1152400FBE112 /* FeedViewController.swift */,
 			);
 			path = EssentialFeediOS;
 			sourceTree = "<group>";
@@ -702,6 +705,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0FAF85F28B1152400FBE112 /* FeedViewController.swift in Sources */,
 				B0FAF84128AC42C800FBE112 /* EssentialFeediOS.docc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1104,6 +1108,7 @@
 		B0FAF85228AC42C800FBE112 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1130,6 +1135,7 @@
 		B0FAF85328AC42C800FBE112 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
