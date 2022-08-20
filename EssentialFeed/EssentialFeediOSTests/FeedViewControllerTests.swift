@@ -190,6 +190,31 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(view?.isShowingRetryAction, true, "Expected retry action for view once image loading completes with invalid image data")
     }
     
+    func test_feedImageViewRetryAction_retriesImageLoad() {
+        let image0 = makeImage(url: URL(string: "http://url-0.come")!)
+        let image1 = makeImage(url: URL(string: "http://url-1.come")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(with: [image0, image1])
+        
+        let view0 = sut.simulateFeedImageViewVisible(at: 0)
+        let view1 = sut.simulateFeedImageViewVisible(at: 1)
+        
+        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url], "Expected two image url requests for the two visible views")
+        
+        loader.completeImageLoadingWithError(at: 0)
+        loader.completeImageLoadingWithError(at: 1)
+        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url], "Expected only two image url requests before retry action")
+        
+        view0?.simulateRetryAction()
+        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url, image0.url], "Expected third image url request after first view retry action")
+        
+        view1?.simulateRetryAction()
+        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url, image0.url, image1.url], "Expected fourth image url request after second view retry action")
+        
+    }
+    
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (FeedViewController, LoaderSpy) {
         let loader = LoaderSpy()
@@ -334,6 +359,10 @@ private extension FeedViewController {
 }
 
 private extension FeedImageCell {
+    func simulateRetryAction() {
+        feedImageRetryButton.simulateTap()
+    }
+    
     var isShowingLocation: Bool {
         return !locationContainer.isHidden
     }
@@ -356,6 +385,16 @@ private extension FeedImageCell {
     
     var renderedImage: Data? {
         return feedImageView.image?.pngData()
+    }
+}
+
+private extension UIButton {
+    func simulateTap() {
+        allTargets.forEach { target in
+            actions(forTarget: target, forControlEvent: .touchUpInside)?.forEach {
+                (target as NSObject).perform(Selector($0))
+            }
+        }
     }
 }
 
