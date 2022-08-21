@@ -67,6 +67,7 @@
 		B0FAF87928B24BFD00FBE112 /* FeedImageCell+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FAF87828B24BFD00FBE112 /* FeedImageCell+TestHelpers.swift */; };
 		B0FAF87B28B24C4400FBE112 /* FeedViewControllerTests+LoaderSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FAF87A28B24C4400FBE112 /* FeedViewControllerTests+LoaderSpy.swift */; };
 		B0FAF87D28B24CB400FBE112 /* FeedViewControllerTests+Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FAF87C28B24CB400FBE112 /* FeedViewControllerTests+Assertions.swift */; };
+		B0FAF87F28B2636F00FBE112 /* FeedRefreshViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FAF87E28B2636F00FBE112 /* FeedRefreshViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -178,6 +179,7 @@
 		B0FAF87828B24BFD00FBE112 /* FeedImageCell+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedImageCell+TestHelpers.swift"; sourceTree = "<group>"; };
 		B0FAF87A28B24C4400FBE112 /* FeedViewControllerTests+LoaderSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedViewControllerTests+LoaderSpy.swift"; sourceTree = "<group>"; };
 		B0FAF87C28B24CB400FBE112 /* FeedViewControllerTests+Assertions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedViewControllerTests+Assertions.swift"; sourceTree = "<group>"; };
+		B0FAF87E28B2636F00FBE112 /* FeedRefreshViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRefreshViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -449,6 +451,7 @@
 			isa = PBXGroup;
 			children = (
 				B0FAF85E28B1152400FBE112 /* FeedViewController.swift */,
+				B0FAF87E28B2636F00FBE112 /* FeedRefreshViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -804,6 +807,7 @@
 			files = (
 				B0FAF86628B2495300FBE112 /* FeedImageDataLoader.swift in Sources */,
 				B0FAF85F28B1152400FBE112 /* FeedViewController.swift in Sources */,
+				B0FAF87F28B2636F00FBE112 /* FeedRefreshViewController.swift in Sources */,
 				B0FAF86328B1800000FBE112 /* UIView+Shimmering.swift in Sources */,
 				B0FAF86128B127BD00FBE112 /* FeedImageCell.swift in Sources */,
 				B0FAF84128AC42C800FBE112 /* EssentialFeediOS.docc in Sources */,
