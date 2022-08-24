@@ -79,6 +79,9 @@ Label</string>
                                                             <state key="normal" title="↻">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
+                                                            <connections>
+                                                                <action selector="retryButtonTapped" destination="AUL-AE-sAe" eventType="touchUpInside" id="uKC-QA-EYm"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <color key="backgroundColor" red="0.89019607840000003" green="0.89019607840000003" blue="0.89019607840000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -120,6 +123,14 @@ Label</string>
                                         <constraint firstAttribute="bottomMargin" secondItem="850-E0-rXg" secondAttribute="bottom" priority="999" constant="6" id="waq-so-wrH"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="descriptionLabel" destination="Krd-Aa-Ihf" id="0jE-7P-BgY"/>
+                                    <outlet property="feedImageContainer" destination="0j7-ct-1bG" id="CfY-c1-Dn8"/>
+                                    <outlet property="feedImageRetryButton" destination="9Rz-UV-q27" id="n3Y-ba-UGF"/>
+                                    <outlet property="feedImageView" destination="6G7-Of-JTj" id="NZD-A7-r8P"/>
+                                    <outlet property="locationContainer" destination="nNi-n5-afA" id="8V1-6C-Hvl"/>
+                                    <outlet property="locationLabel" destination="w5D-7h-vsi" id="DwT-3R-P3r"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
