@@ -28,13 +28,13 @@ public final class ErrorView: UIView {
     
     private func setMessageAnimated(_ message: String?) {
         if let message = message {
-            showAnimated(message)
+            showMessageAnimated(message)
         } else {
-            hideAnimated()
+            hideMessageAnimated()
         }
     }
     
-    private func showAnimated(_ message: String?) {
+    private func showMessageAnimated(_ message: String?) {
         label.text = message
         
         UIView.animate(withDuration: 0.25) {
@@ -42,7 +42,7 @@ public final class ErrorView: UIView {
         }
     }
     
-    private func hideAnimated() {
+    @IBAction func hideMessageAnimated() {
         UIView.animate(
             withDuration: 0.25,
             delay: 0,
