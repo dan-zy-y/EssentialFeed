@@ -8,10 +8,10 @@
 import XCTest
 import EssentialFeed
 
-struct FeedImageViewModel {
+struct FeedImageViewModel<Image> {
     let description: String?
     let location: String?
-    let image: Any?
+    let image: Image?
     let isLoading: Bool
     let shouldRetry: Bool
     
@@ -21,15 +21,17 @@ struct FeedImageViewModel {
 }
 
 protocol FeedImageView {
-    func display(_ viewModel: FeedImageViewModel)
+    associatedtype Image
+    
+    func display(_ viewModel: FeedImageViewModel<Image>)
 }
 
-final class FeedImagePresenter {
+final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
     
-    private let view: FeedImageView
-    private let imageTransformer: (Data) -> Any?
+    private let view: View
+    private let imageTransformer: (Data) -> Image?
     
-    init(view: FeedImageView, imageTransformer: @escaping (Data) -> Any?) {
+    init(view: View, imageTransformer: @escaping (Data) -> Image?) {
         self.view = view
         self.imageTransformer = imageTransformer
     }
@@ -47,13 +49,14 @@ final class FeedImagePresenter {
     }
     
     func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
+        let image = imageTransformer(data)
         view.display(
             FeedImageViewModel(
                 description: model.description,
                 location: model.location,
-                image: nil,
+                image: image,
                 isLoading: false,
-                shouldRetry: true
+                shouldRetry: image == nil
             )
         )
     }
@@ -98,22 +101,48 @@ class FeedImagePresenterTests: XCTestCase {
         XCTAssertNil(message?.image)
     }
     
+    func test_didFinishLoadingImageData_displaysImageOnSuccessfulImageTransformation() {
+        let image = uniqueImage()
+        let data = Data()
+        let transformedData = AnyImage()
+        let (sut, view) = makeSUT { _ in return transformedData }
+        
+        sut.didFinishLoadingImageData(with: data, for: image)
+        
+        let message = view.messages.first
+        XCTAssertEqual(view.messages.count, 1)
+        XCTAssertEqual(message?.description, image.description)
+        XCTAssertEqual(message?.location, image.location)
+        XCTAssertEqual(message?.isLoading, false)
+        XCTAssertEqual(message?.shouldRetry, false)
+        XCTAssertEqual(message?.image, transformedData)
+    }
+    
     // MARK: - Helpers
     
-    private func makeSUT() -> (FeedImagePresenter, ViewSpy) {
+    private func makeSUT(
+        imageTransformer: @escaping (Data) -> AnyImage? = { _ in nil },
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> (FeedImagePresenter<ViewSpy, AnyImage>, ViewSpy) {
         let view = ViewSpy()
-        let sut = FeedImagePresenter(view: view, imageTransformer: fail)
+        let sut = FeedImagePresenter(view: view, imageTransformer: imageTransformer)
+        trackMemoryLeaks(view, file: file, line: line)
+        trackMemoryLeaks(sut, file: file, line: line)
         
         return (sut, view)
     }
     
-    private var fail: (Data) -> Void? {
+    private var fail: (Data) -> AnyImage? {
         return { _ in nil }
     }
+    
+    private struct AnyImage: Equatable {}
+    
     private class ViewSpy: FeedImageView {
-        private (set) var messages = [FeedImageViewModel]()
+        private (set) var messages = [FeedImageViewModel<AnyImage>]()
         
-        func display(_ viewModel: FeedImageViewModel) {
+        func display(_ viewModel: FeedImageViewModel<AnyImage>) {
             messages.append(viewModel)
         }
     }
