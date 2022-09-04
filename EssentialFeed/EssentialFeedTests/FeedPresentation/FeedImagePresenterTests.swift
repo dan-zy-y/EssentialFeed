@@ -102,11 +102,14 @@ class FeedImagePresenterTests: XCTestCase {
     
     private func makeSUT() -> (FeedImagePresenter, ViewSpy) {
         let view = ViewSpy()
-        let sut = FeedImagePresenter(view: view, imageTransformer: { _ in })
+        let sut = FeedImagePresenter(view: view, imageTransformer: fail)
         
         return (sut, view)
     }
     
+    private var fail: (Data) -> Void? {
+        return { _ in nil }
+    }
     private class ViewSpy: FeedImageView {
         private (set) var messages = [FeedImageViewModel]()
         
