@@ -1,29 +1,29 @@
 //
-//  FeedImageViewModel.swift
-//  EssentialFeediOS
+//  FeedImagePresenter.swift
+//  EssentialFeed
 //
-//  Created by Daniil Zadorozhnyy on 21.08.2022.
+//  Created by Daniil Zadorozhnyy on 04.09.2022.
 //
 
-import EssentialFeed
+import Foundation
 
-protocol FeedImageView {
+public protocol FeedImageView {
     associatedtype Image
     
     func display(_ viewModel: FeedImageViewModel<Image>)
 }
 
-final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
+public final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
     
     private let view: View
     private let imageTransformer: (Data) -> Image?
     
-    init(view: View, imageTransformer: @escaping (Data) -> Image?) {
+    public init(view: View, imageTransformer: @escaping (Data) -> Image?) {
         self.view = view
         self.imageTransformer = imageTransformer
     }
     
-    func didStartLoadingImageData(for model: FeedImage) {
+    public func didStartLoadingImageData(for model: FeedImage) {
         view.display(
             FeedImageViewModel(
                 description: model.description,
@@ -35,25 +35,20 @@ final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == I
         )
     }
     
-    private struct InvalidImageDataError: Error {}
-    
-    func didFinishImageDataLoading(with data: Data, for model: FeedImage) {
-        guard let image = imageTransformer(data) else {
-            return didFinishImageDataLoading(with: InvalidImageDataError(), for: model)
-        }
-        
+    public func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
+        let image = imageTransformer(data)
         view.display(
             FeedImageViewModel(
                 description: model.description,
                 location: model.location,
                 image: image,
                 isLoading: false,
-                shouldRetry: false
+                shouldRetry: image == nil
             )
         )
     }
     
-    func didFinishImageDataLoading(with error: Error, for model: FeedImage) {
+    public func didFinishLoadingImageData(with error: Error, for model: FeedImage) {
         view.display(
             FeedImageViewModel(
                 description: model.description,
