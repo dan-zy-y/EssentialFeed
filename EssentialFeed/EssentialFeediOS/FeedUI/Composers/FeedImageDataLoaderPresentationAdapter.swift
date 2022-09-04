@@ -28,9 +28,9 @@ final class FeedImageDataLoaderPresentationAdapter<View: FeedImageView, Image>: 
         task = imageLoader.loadImageData(from: self.model.url) { [weak self] result in
             switch result {
             case let .success(data):
-                self?.presenter?.didFinishImageDataLoading(with: data, for: model)
+                self?.presenter?.didFinishLoadingImageData(with: data, for: model)
             case let .failure(error):
-                self?.presenter?.didFinishImageDataLoading(with: error, for: model)
+                self?.presenter?.didFinishLoadingImageData(with: error, for: model)
             }
         }
     }
