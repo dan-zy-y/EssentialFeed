@@ -9,12 +9,32 @@ import Foundation
 
 public final class LocalFeedImageDataLoader {
     
-    public enum Error: Swift.Error {
+    private let store: FeedImageDataStore
+    
+    public init(store: FeedImageDataStore) {
+        self.store = store
+    }
+}
+
+extension LocalFeedImageDataLoader {
+    public typealias SaveResult = Result<Void, Swift.Error>
+    
+    public func save(
+        _ data: Data,
+        for url: URL,
+        completion: @escaping (SaveResult) -> Void
+    ) {
+        store.insert(data, for: url, completion: completion)
+    }
+}
+
+extension LocalFeedImageDataLoader: FeedImageDataLoader {
+    public enum LoadError: Swift.Error {
         case failed
         case notFound
     }
     
-    private final class Task: FeedImageDataLoaderTask {
+    private final class LoadImageDataTask: FeedImageDataLoaderTask {
         private var completion: ((FeedImageDataLoader.Result) -> Void)?
         
         init(_ completion: @escaping (FeedImageDataLoader.Result) -> Void) {
@@ -34,31 +54,15 @@ public final class LocalFeedImageDataLoader {
         }
     }
     
-    private let store: FeedImageDataStore
-    
-    public init(store: FeedImageDataStore) {
-        self.store = store
-    }
-    
-    public typealias SaveResult = Result<Void, Swift.Error>
-    
-    public func save(
-        _ data: Data,
-        for url: URL,
-        completion: @escaping (SaveResult) -> Void
-    ) {
-        store.insert(data, for: url, completion: completion)
-    }
-    
     public func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
-        let task = Task(completion)
+        let task = LoadImageDataTask(completion)
         store.retrieve(dataForURL: url) { [weak self] result in
             guard self != nil else { return }
             
             task.complete(with:
                 result
-                    .mapError { _ in Error.failed }
-                    .flatMap { data in data.map { .success($0) } ?? .failure(Error.notFound) }
+                    .mapError { _ in LoadError.failed }
+                    .flatMap { data in data.map { .success($0) } ?? .failure(LoadError.notFound) }
             )
         }
         return task
