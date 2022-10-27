@@ -36,36 +36,14 @@ final class FeedLoaderWithFallbackCompositeTests: XCTestCase {
         let fallbackFeed = uniqueFeed()
         let sut = makeSUT(primaryResult: .success(primaryFeed), fallbackResult: .success(fallbackFeed))
         
-        let exp = expectation(description: "Wait for load completion")
-        sut.load { result in
-            switch result {
-            case let .success(recievedFeed):
-                XCTAssertEqual(recievedFeed, primaryFeed)
-            case .failure:
-                XCTFail("Expected successful load feed result, got \(result) instead")
-            }
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1)
+        expect(sut, toCompleteWith: .success(primaryFeed))
     }
     
     func test_load_deliversFallbackFeedOnPrimaryLoaderFailure() {
         let fallbackFeed = uniqueFeed()
         let sut = makeSUT(primaryResult: .failure(anyNSError()), fallbackResult: .success(fallbackFeed))
         
-        let exp = expectation(description: "Wait for load completion")
-        sut.load { result in
-            switch result {
-            case let .success(recievedFeed):
-                XCTAssertEqual(recievedFeed, fallbackFeed)
-            case .failure:
-                XCTFail("Expected successful load feed result, got \(result) instead")
-            }
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1)
+        expect(sut, toCompleteWith: .success(fallbackFeed))
     }
     
     private func makeSUT(
@@ -88,6 +66,27 @@ final class FeedLoaderWithFallbackCompositeTests: XCTestCase {
         addTeardownBlock { [weak instance] in
             XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
         }
+    }
+    
+    private func expect(
+        _ sut: FeedLoader,
+        toCompleteWith expectedResult: FeedLoader.Result,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) {
+        let exp = expectation(description: "Wait for load completion")
+        sut.load { receivedResult in
+            switch (receivedResult, expectedResult) {
+            case let (.success(recievedFeed), .success(expectedFeed)):
+                XCTAssertEqual(recievedFeed, expectedFeed)
+            case (.failure, .failure):
+                break
+            default:
+                XCTFail("Expected \(expectedResult), got \(receivedResult) instead")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
     }
     
     private func anyNSError() -> NSError {
