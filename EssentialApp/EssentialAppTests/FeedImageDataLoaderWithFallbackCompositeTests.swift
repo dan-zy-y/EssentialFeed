@@ -98,6 +98,19 @@ final class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
         XCTAssertEqual(fallbackLoader.cancelledURLs, [url], "Expected to cancel URL loading from fallback loader")
     }
     
+    func test_loadImageData_deliversPrimaryImageDataOnPrimaryLoadSuccess() {
+        let (sut, primaryLoader, _) = makeSUT()
+        
+        let primaryData = anyData()
+        expect(
+            sut,
+            toCompleteWith: .success(primaryData),
+            when: {
+                primaryLoader.complete(with: .success(primaryData))
+            }
+        )
+    }
+    
     private func makeSUT(
         file: StaticString = #file,
         line: UInt = #line
@@ -118,6 +131,37 @@ final class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
         addTeardownBlock { [weak instance] in
             XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
         }
+    }
+    
+    private func expect(
+        _ sut: FeedImageDataLoader,
+        toCompleteWith expectedResult: FeedImageDataLoader.Result,
+        when action: () -> Void,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) {
+        let exp = expectation(description: "Wait for load completion")
+        
+        _ = sut.loadImageData(from: anyURL()) { receivedResult in
+            switch (receivedResult, expectedResult) {
+            case let (.success(receivedFeed), .success(expectedFeed)):
+                XCTAssertEqual(receivedFeed, expectedFeed)
+            case (.failure, .failure):
+                break
+            default:
+                XCTFail("Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
+            }
+            
+            exp.fulfill()
+        }
+        
+        action()
+        
+        wait(for: [exp], timeout: 1)
+    }
+    
+    private func anyData() -> Data {
+        return Data("any-data".utf8)
     }
     
     private func anyURL() -> URL {
