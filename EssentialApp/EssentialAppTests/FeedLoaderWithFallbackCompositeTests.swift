@@ -1,5 +1,5 @@
 //
-//  RemoteWithLocalFallbackFeedLoaderTests.swift
+//  FeedLoaderWithFallbackCompositeTests.swift
 //  EssentialAppTests
 //
 //  Created by Daniil Zadorozhnyy on 26.10.2022.
