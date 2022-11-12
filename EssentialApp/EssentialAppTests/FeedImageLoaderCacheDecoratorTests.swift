@@ -56,9 +56,17 @@ final class FeedImageLoaderCacheDecoratorTests: XCTestCase {
         let (sut, loader) = makeSUT()
         
         let imageData = anyData()
-        expect(sut, toFinishWith: .success(imageData)) {
+        expect(sut, toFinishWith: .success(imageData), when: {
             loader.complete(with: .success(imageData))
-        }
+        })
+    }
+    
+    func test_loadImageData_deliversErrorOnLoadError() {
+        let (sut, loader) = makeSUT()
+        
+        expect(sut, toFinishWith: .failure(anyNSError()), when: {
+            loader.complete(with: .failure(anyNSError()))
+        })
     }
     
     private func makeSUT(
@@ -96,6 +104,5 @@ final class FeedImageLoaderCacheDecoratorTests: XCTestCase {
         action()
         
         wait(for: [exp], timeout: 1)
-        
     }
 }
