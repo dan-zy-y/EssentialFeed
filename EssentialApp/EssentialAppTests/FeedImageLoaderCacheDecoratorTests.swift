@@ -36,18 +36,10 @@ final class FeedImageLoaderCacheDecoratorTests: XCTestCase {
     func test_loadImageData_deliversImageDataOnLoaderSuccess() {
         let (sut, loader) = makeSUT()
         
-        let exp = expectation(description: "Wait for load")
-        var receivedData: Data?
-        _ = sut.loadImageData(from: anyURL()) { result in
-            receivedData = try? result.get()
-            exp.fulfill()
-        }
-        
         let imageData = anyData()
-        loader.complete(with: .success(imageData))
-        
-        wait(for: [exp], timeout: 1)
-        XCTAssertEqual(receivedData, imageData)
+        expect(sut, toFinishWith: .success(imageData)) {
+            loader.complete(with: .success(imageData))
+        }
     }
     
     private func makeSUT(
@@ -60,5 +52,31 @@ final class FeedImageLoaderCacheDecoratorTests: XCTestCase {
         trackMemoryLeaks(sut)
         
         return (sut, loader)
+    }
+    
+    private func expect(
+        _ sut: FeedImageLoaderCacheDecorator,
+        toFinishWith expectedResult: FeedImageDataLoader.Result,
+        when action: () -> Void,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) {
+        let exp = expectation(description: "Wait for load")
+        _ = sut.loadImageData(from: anyURL()) { receivedResult in
+            switch (receivedResult, expectedResult) {
+            case let (.success(receivedData), .success(expectedData)):
+                XCTAssertEqual(receivedData, expectedData, "Expected \(receivedData) to equal \(expectedData)")
+            case (.failure, .failure):
+                break
+            default:
+                XCTFail("Expected to received \(expectedResult), got \(receivedResult) instead")
+            }
+            exp.fulfill()
+        }
+        
+        action()
+        
+        wait(for: [exp], timeout: 1)
+        
     }
 }
