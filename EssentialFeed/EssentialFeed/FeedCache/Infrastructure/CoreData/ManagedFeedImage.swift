@@ -25,15 +25,14 @@ extension ManagedFeedImage {
         request.fetchLimit = 1
         return try context.fetch(request).first
     }
-    
+
     static func images(from localFeed: [LocalFeedImage], in context: NSManagedObjectContext) -> NSOrderedSet {
-        NSOrderedSet(array: localFeed.map {
+        return NSOrderedSet(array: localFeed.map { local in
             let managed = ManagedFeedImage(context: context)
-            managed.id = $0.id
-            managed.imageDescription = $0.description
-            managed.location = $0.location
-            managed.url = $0.url
-            
+            managed.id = local.id
+            managed.imageDescription = local.description
+            managed.location = local.location
+            managed.url = local.url
             return managed
         })
     }

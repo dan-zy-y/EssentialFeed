@@ -7,16 +7,31 @@
 
 import CoreData
 
-public class CoreDataFeedStore {
+public final class CoreDataFeedStore {
+    private static let modelName = "FeedStore"
+    private static let model = NSManagedObjectModel.with(name: modelName, in: Bundle(for: CoreDataFeedStore.self))
     
-    private let persistentContainer: NSPersistentContainer
+    private let container: NSPersistentContainer
     private let context: NSManagedObjectContext
-    
-    public init(storeURL: URL, bundle: Bundle = .main) throws {
-        self.persistentContainer = try NSPersistentContainer.load(modelName: "FeedStore", url: storeURL, in: bundle)
-        self.context = persistentContainer.newBackgroundContext()
+
+    enum StoreError: Error {
+        case modelNotFound
+        case failedToLoadPersistentContainer(Error)
     }
-    
+
+    public init(storeURL: URL) throws {
+        guard let model = CoreDataFeedStore.model else {
+            throw StoreError.modelNotFound
+        }
+        
+        do {
+            container = try NSPersistentContainer.load(name: CoreDataFeedStore.modelName, model: model, url: storeURL)
+            context = container.newBackgroundContext()
+        } catch {
+            throw StoreError.failedToLoadPersistentContainer(error)
+        }
+    }
+
     func perform(_ action: @escaping (NSManagedObjectContext) -> Void) {
         let context = self.context
         context.perform { action(context) }
@@ -24,7 +39,7 @@ public class CoreDataFeedStore {
     
     private func cleanUpReferencesToPersistentStores() {
         context.performAndWait {
-            let coordinator = self.persistentContainer.persistentStoreCoordinator
+            let coordinator = self.container.persistentStoreCoordinator
             try? coordinator.persistentStores.forEach(coordinator.remove)
         }
     }
