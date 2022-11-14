@@ -48,23 +48,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func makeRemoteClient() -> HTTPClient {
-        switch UserDefaults.standard.string(forKey: "connectivity") {
-        case "offline":
+        #if DEBUG
+        if UserDefaults.standard.string(forKey: "connectivity") == "offline" {
             return AlwaysFailingHTTPClient()
-        default:
-            return URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
         }
+        #endif
+        
+        return URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
     }
     
     private func makecoreDataFeedStore(with url: URL) -> CoreDataFeedStore {
+        #if DEBUG
         if CommandLine.arguments.contains("-reset") {
             try? FileManager.default.removeItem(at: url)
         }
+        #endif
         
         return try! CoreDataFeedStore(storeURL: url)
     }
 }
 
+#if DEBUG
 private class AlwaysFailingHTTPClient: HTTPClient {
     
     private class Task: HTTPClientTask {
@@ -76,4 +80,4 @@ private class AlwaysFailingHTTPClient: HTTPClient {
         return Task()
     }
 }
-
+#endif
