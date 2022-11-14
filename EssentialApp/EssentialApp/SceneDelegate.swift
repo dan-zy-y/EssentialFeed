@@ -24,7 +24,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let localStoreURL = NSPersistentContainer
             .defaultDirectoryURL()
             .appendingPathComponent("feed-store.sqlite")
-        let localStore = try! CoreDataFeedStore(storeURL: localStoreURL)
+        
+        let localStore = makecoreDataFeedStore(with: localStoreURL)
         let localFeedLoader = LocalFeedLoader(store: localStore, currentDate: Date.init)
         let localImageLoader = LocalFeedImageDataLoader(store: localStore)
         
@@ -53,6 +54,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         default:
             return URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
         }
+    }
+    
+    private func makecoreDataFeedStore(with url: URL) -> CoreDataFeedStore {
+        if CommandLine.arguments.contains("-reset") {
+            try? FileManager.default.removeItem(at: url)
+        }
+        
+        return try! CoreDataFeedStore(storeURL: url)
     }
 }
 
