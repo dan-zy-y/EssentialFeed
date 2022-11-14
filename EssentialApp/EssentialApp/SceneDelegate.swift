@@ -13,7 +13,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         let url = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed/v1/feed")!
@@ -22,8 +21,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let feedLoader = RemoteFeedLoader(url: url, client: client)
         let imageLoader = RemoteFeedImageDataLoader(client: client)
         
-        let viewController = FeedUIComposer.feedComposedWith(feedLoader: feedLoader, imageLoader: imageLoader)
-        window?.rootViewController = viewController
+        window?.rootViewController = FeedUIComposer.feedComposedWith(
+            feedLoader: feedLoader,
+            imageLoader: imageLoader)
     }
 }
 
