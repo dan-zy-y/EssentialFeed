@@ -21,7 +21,7 @@ public class RemoteLoader<Resource> {
     public typealias Mapper = (Data, HTTPURLResponse) throws -> Resource
     
     public init(
-        url: URL = URL(string: "https://a-url.com")!,
+        url: URL,
         client: HTTPClient,
         mapper: @escaping Mapper
     ) {
