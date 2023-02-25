@@ -60,62 +60,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         localFeedLoader.validateCache()
     }
     
-    private func makeRemoteFeedLoaderWithLocalFallback() -> FeedLoader.Publisher {
+    private func makeRemoteFeedLoaderWithLocalFallback() -> AnyPublisher<[FeedImage], Error> {
         let url = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed/v1/feed")!
         
-        let remoteFeedLoader = RemoteFeedLoader(url: url, client: httpClient)
-        
-        return remoteFeedLoader
-            .loadPublisher()
+        return httpClient
+            .getPublisher(url: url)
+            .tryMap(FeedItemsMapper.map)
             .caching(to: localFeedLoader)
             .fallback(to: localFeedLoader.loadPublisher)
     }
     
     private func makeLocalImageDataLoaderWithRemoteFallback(url: URL) -> FeedImageDataLoader.Publisher {
-        let remoteImageLoader = RemoteFeedImageDataLoader(client: httpClient)
         let localImageLoader = LocalFeedImageDataLoader(store: store)
         
         return localImageLoader
             .loadImageDataPublisher(from: url)
-            .fallback(to: {
-                remoteImageLoader.loadImageDataPublisher(from: url)
+            .fallback(to: { [httpClient] in
+                httpClient
+                    .getPublisher(url: url)
+                    .tryMap(FeedImageDataMapper.map)
                     .caching(to: localImageLoader, using: url)
             })
     }
 }
-
-extension DispatchQueue {
-    static var immediateWhenOnMainQueueScheduler: ImmediateWhenOnMainQueueScheduler {
-        return ImmediateWhenOnMainQueueScheduler()
-    }
-    
-    struct ImmediateWhenOnMainQueueScheduler: Scheduler {
-        typealias SchedulerTimeType = DispatchQueue.SchedulerTimeType
-        typealias SchedulerOptions = DispatchQueue.SchedulerOptions
-        
-        var now: DispatchQueue.SchedulerTimeType {
-            DispatchQueue.main.now
-        }
-        
-        var minimumTolerance: DispatchQueue.SchedulerTimeType.Stride {
-            DispatchQueue.main.minimumTolerance
-        }
-        
-        func schedule(options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) {
-            guard Thread.isMainThread else {
-                return DispatchQueue.main.schedule(options: options, action)
-            }
-            
-            action()
-        }
-        
-        func schedule(after date: DispatchQueue.SchedulerTimeType, tolerance: DispatchQueue.SchedulerTimeType.Stride, options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) {
-            DispatchQueue.main.schedule(after: date, tolerance: tolerance, options: options, action)
-        }
-        
-        func schedule(after date: DispatchQueue.SchedulerTimeType, interval: DispatchQueue.SchedulerTimeType.Stride, tolerance: DispatchQueue.SchedulerTimeType.Stride, options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) -> Cancellable {
-            DispatchQueue.main.schedule(after: date, interval: interval, tolerance: tolerance, options: options, action)
-        }
-    }
-}
-
