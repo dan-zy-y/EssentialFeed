@@ -10,13 +10,15 @@ import XCTest
 import EssentialFeed
 
 extension FeedUIIntegrationTests {
-    func localized(for key: String, file: StaticString = #file, line: UInt = #line) -> String {
-        let table = "Feed"
-        let bundle = Bundle(for: FeedPresenter.self)
-        let value = bundle.localizedString(forKey: key, value: nil, table: table)
-        if value == key {
-            XCTFail("Missing localized string for key: \(key)")
-        }
-        return value
+    class DummyView: ResourceView {
+        func display(_ viewModel: Any) {}
+    }
+    
+    var loadError: String {
+        LoadResourcePresenter<Any, DummyView>.loadError
+    }
+    
+    var feedTitle: String {
+        FeedPresenter.title
     }
 }
