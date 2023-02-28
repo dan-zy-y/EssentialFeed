@@ -24,9 +24,9 @@ class FeedPresenterTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func localized(for key: String, table: String = "Feed", file: StaticString = #file, line: UInt = #line) -> String {
+    private func localized(for key: String, file: StaticString = #file, line: UInt = #line) -> String {
         let bundle = Bundle(for: FeedPresenter.self)
-        let value = bundle.localizedString(forKey: key, value: nil, table: table)
+        let value = bundle.localizedString(forKey: key, value: nil, table: "Feed")
         if value == key {
             XCTFail("Missing localized string for key: \(key)")
         }
