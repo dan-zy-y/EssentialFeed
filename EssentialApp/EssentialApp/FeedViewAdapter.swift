@@ -11,12 +11,12 @@ import EssentialFeed
 import EssentialFeediOS
 
 final class FeedViewAdapter: ResourceView {
-    private weak var controller: FeedViewController?
+    private weak var controller: ListViewController?
     private var cancellable: AnyCancellable?
     private let imageLoader: (URL) -> FeedImageDataLoader.Publisher
     
     init(
-        controller: FeedViewController,
+        controller: ListViewController,
         imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher
     ) {
         self.controller = controller
