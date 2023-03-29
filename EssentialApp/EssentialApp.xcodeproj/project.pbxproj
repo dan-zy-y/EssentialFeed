@@ -24,11 +24,10 @@
 		B0810D282924455A00F61022 /* UIImage+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0810D212924455A00F61022 /* UIImage+TestHelpers.swift */; };
 		B0810D292924455A00F61022 /* FeedViewControllerTests+Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0810D1D2924455900F61022 /* FeedViewControllerTests+Assertions.swift */; };
 		B0810D2A2924455A00F61022 /* FeedImageCell+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0810D192924455700F61022 /* FeedImageCell+TestHelpers.swift */; };
-		B0810D312924458800F61022 /* FeedImageDataLoaderPresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0810D2C2924458700F61022 /* FeedImageDataLoaderPresentationAdapter.swift */; };
 		B0810D332924458800F61022 /* FeedUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0810D302924458800F61022 /* FeedUIComposer.swift */; };
 		B0810D342924458800F61022 /* FeedViewAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0810D2D2924458700F61022 /* FeedViewAdapter.swift */; };
 		B0810D352924458800F61022 /* WeakRefVirtualProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0810D2F2924458700F61022 /* WeakRefVirtualProxy.swift */; };
-		B0810D362924458800F61022 /* FeedLoaderPresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0810D2B2924458700F61022 /* FeedLoaderPresentationAdapter.swift */; };
+		B0810D362924458800F61022 /* ResourceLoaderPresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0810D2B2924458700F61022 /* ResourceLoaderPresentationAdapter.swift */; };
 		B0810D382924460500F61022 /* FeedUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0810D372924460400F61022 /* FeedUIIntegrationTests.swift */; };
 		B0810D552925922400F61022 /* FeedAcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0810D542925922400F61022 /* FeedAcceptanceTests.swift */; };
 		B0996D5C291854AE00F2D593 /* FeedLoaderStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0996D5B291854AE00F2D593 /* FeedLoaderStub.swift */; };
@@ -82,8 +81,7 @@
 		B0810D1F2924455900F61022 /* UIRefreshControl+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+TestHelpers.swift"; sourceTree = "<group>"; };
 		B0810D202924455A00F61022 /* UIButton+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+TestHelpers.swift"; sourceTree = "<group>"; };
 		B0810D212924455A00F61022 /* UIImage+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TestHelpers.swift"; sourceTree = "<group>"; };
-		B0810D2B2924458700F61022 /* FeedLoaderPresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderPresentationAdapter.swift; sourceTree = "<group>"; };
-		B0810D2C2924458700F61022 /* FeedImageDataLoaderPresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderPresentationAdapter.swift; sourceTree = "<group>"; };
+		B0810D2B2924458700F61022 /* ResourceLoaderPresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceLoaderPresentationAdapter.swift; sourceTree = "<group>"; };
 		B0810D2D2924458700F61022 /* FeedViewAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewAdapter.swift; sourceTree = "<group>"; };
 		B0810D2F2924458700F61022 /* WeakRefVirtualProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakRefVirtualProxy.swift; sourceTree = "<group>"; };
 		B0810D302924458800F61022 /* FeedUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIComposer.swift; sourceTree = "<group>"; };
@@ -177,8 +175,7 @@
 				B0F9A03429086F8300B54038 /* AppDelegate.swift */,
 				B0DE43F4298FD559004701C0 /* CombineHelpers.swift */,
 				B0810D302924458800F61022 /* FeedUIComposer.swift */,
-				B0810D2C2924458700F61022 /* FeedImageDataLoaderPresentationAdapter.swift */,
-				B0810D2B2924458700F61022 /* FeedLoaderPresentationAdapter.swift */,
+				B0810D2B2924458700F61022 /* ResourceLoaderPresentationAdapter.swift */,
 				B0810D2D2924458700F61022 /* FeedViewAdapter.swift */,
 				B0810D2F2924458700F61022 /* WeakRefVirtualProxy.swift */,
 				B0F9A03629086F8300B54038 /* SceneDelegate.swift */,
@@ -307,11 +304,10 @@
 				B0F9A03529086F8300B54038 /* AppDelegate.swift in Sources */,
 				B0DE43F5298FD559004701C0 /* CombineHelpers.swift in Sources */,
 				B0810D342924458800F61022 /* FeedViewAdapter.swift in Sources */,
-				B0810D312924458800F61022 /* FeedImageDataLoaderPresentationAdapter.swift in Sources */,
 				B0810D332924458800F61022 /* FeedUIComposer.swift in Sources */,
 				B0F9A03729086F8300B54038 /* SceneDelegate.swift in Sources */,
 				B0810D352924458800F61022 /* WeakRefVirtualProxy.swift in Sources */,
-				B0810D362924458800F61022 /* FeedLoaderPresentationAdapter.swift in Sources */,
+				B0810D362924458800F61022 /* ResourceLoaderPresentationAdapter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,7 +478,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 845N43FAUQ;
+				DEVELOPMENT_TEAM = YSP9738RM4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EssentialApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -513,7 +509,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 845N43FAUQ;
+				DEVELOPMENT_TEAM = YSP9738RM4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EssentialApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -545,7 +541,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 845N43FAUQ;
+				DEVELOPMENT_TEAM = YSP9738RM4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -572,7 +568,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 845N43FAUQ;
+				DEVELOPMENT_TEAM = YSP9738RM4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
