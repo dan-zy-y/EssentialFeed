@@ -15,14 +15,6 @@ public final class ImageCommentCellController: CellController {
         self.model = model
     }
     
-    public func preload() {
-        
-    }
-    
-    public func cancelLoad() {
-        
-    }
-    
     public func view(in tableView: UITableView) -> UITableViewCell {
         let cell: ImageCommentCell = tableView.dequeueReusableCell()
         cell.messageLabel.text = model.message
