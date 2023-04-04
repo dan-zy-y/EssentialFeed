@@ -27,6 +27,7 @@ final class ListSnapshotTests: XCTestCase {
         
         assert(snapshot: sut.snapshot(for: .iPhone8(style: .light)), named: "LIST_WITH_ERROR_light")
         assert(snapshot: sut.snapshot(for: .iPhone8(style: .dark)), named: "LIST_WITH_ERROR_dark")
+        assert(snapshot: sut.snapshot(for: .iPhone8(style: .light, contentSize: .extraExtraExtraLarge)), named: "LIST_WITH_ERROR_light_extraExtraExtraLarge")
     }
     
     private func makeSUT() -> ListViewController {
@@ -37,7 +38,7 @@ final class ListSnapshotTests: XCTestCase {
         controller.tableView.showsVerticalScrollIndicator = false
         controller.tableView.showsHorizontalScrollIndicator = false
         
-        return controller 
+        return controller
     }
     
     private func emptyList() -> [CellController] {
