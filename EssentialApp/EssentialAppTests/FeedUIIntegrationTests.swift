@@ -110,6 +110,19 @@ final class FeedUIIntegrationTests: XCTestCase {
         XCTAssertNil(sut.errorMessage)
     }
     
+    func test_tapOnErrorView_hidesErrorMessage() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        XCTAssertNil(sut.errorMessage)
+        
+        loader.completeFeedLoadingWithError(at: 0)
+        XCTAssertEqual(sut.errorMessage, loadError)
+        
+        sut.simulateErrorViewTap()
+        XCTAssertNil(sut.errorMessage)
+    }
+    
     func test_feedImageView_loadsImageURLWhenVisible() {
         let image0 = makeImage(url: URL(string: "http://url-0.come")!)
         let image1 = makeImage(url: URL(string: "http://url-1.come")!)
@@ -324,7 +337,7 @@ final class FeedUIIntegrationTests: XCTestCase {
     }
     
     // MARK: - Helpers
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (FeedViewController, LoaderSpy) {
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (ListViewController, LoaderSpy) {
         let loader = LoaderSpy()
         let sut = FeedUIComposer.feedComposedWith(feedLoader: loader.loadPublisher, imageLoader: loader.loadImageDataPublisher)
         trackMemoryLeaks(loader, file: file, line: line)
