@@ -101,7 +101,7 @@ class FeedSnapshotTests: XCTestCase {
         let loadMore = LoadMoreCellController()
         loadMore.display(ResourceLoadingViewModel(isLoading: true))
         return feedWith(loadMore: loadMore)
-    }
+    } 
     
     private func feedWithLoadMoreError() -> [CellController] {
         let loadMore = LoadMoreCellController()
