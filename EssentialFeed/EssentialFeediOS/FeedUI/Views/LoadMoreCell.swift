@@ -17,7 +17,7 @@ public class LoadMoreCell: UITableViewCell {
         NSLayoutConstraint.activate([
             spinner.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             spinner.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            contentView.heightAnchor.constraint(lessThanOrEqualToConstant: 40)
+            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 40)
         ])
         
         return spinner
@@ -26,9 +26,9 @@ public class LoadMoreCell: UITableViewCell {
     private lazy var messageLabel: UILabel = {
         let label = UILabel()
         label.textColor = .tertiaryLabel
-        label.textAlignment = .center
         label.font = .preferredFont(forTextStyle: .footnote)
         label.numberOfLines = 0
+        label.textAlignment = .center
         label.adjustsFontForContentSizeCategory = true
         contentView.addSubview(label)
         
@@ -37,7 +37,7 @@ public class LoadMoreCell: UITableViewCell {
             label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             contentView.trailingAnchor.constraint(equalTo: label.trailingAnchor, constant: 8),
             label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            contentView.bottomAnchor.constraint(equalTo: label.bottomAnchor, constant: 8)
+            contentView.bottomAnchor.constraint(equalTo: label.bottomAnchor, constant: 8),
         ])
         
         return label
@@ -56,6 +56,6 @@ public class LoadMoreCell: UITableViewCell {
     
     public var message: String? {
         get { messageLabel.text }
-        set { messageLabel.text = newValue  }
+        set { messageLabel.text = newValue }
     }
 }
