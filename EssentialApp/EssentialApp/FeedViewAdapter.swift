@@ -58,14 +58,17 @@ final class FeedViewAdapter: ResourceView {
             controller?.display(feed)
             return
         }
+        
         let loadMoreAdapter = LoadMorePresentationAdapter(loader: loadMorePublisher)
         let loadMore = LoadMoreCellController(callback: loadMoreAdapter.loadResource)
+        
         loadMoreAdapter.presenter = LoadResourcePresenter(
             resourceView: self,
             loadingView: WeakRefVirtualProxy(loadMore),
             errorView: WeakRefVirtualProxy(loadMore),
             mapper: { $0 }
         )
+        
         let loadMoreSection = [CellController(id: UUID(), loadMore)]
         
         controller?.display(feed, loadMoreSection)

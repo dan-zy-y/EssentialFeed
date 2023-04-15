@@ -101,13 +101,12 @@ extension ListViewController {
         ds?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
     }
     
-    func simulateUserLoadMoreFeedAction() {
-        guard let view = cell(row: 0, section: loadMoreSection) else {
-            return
-        }
-        let ds = tableView.delegate
+    func simulateLoadMoreFeedAction() {
+        guard let view = cell(row: 0, section: loadMoreSection) else { return }
+        
+        let delegate = tableView.delegate
         let index = IndexPath(row: 0, section: loadMoreSection)
-        ds?.tableView?(tableView, willDisplay: view, forRowAt: index)
+        delegate?.tableView?(tableView, willDisplay: view, forRowAt: index)
     }
     
     func renderedFeedImageData(at index: Int) -> Data? {
