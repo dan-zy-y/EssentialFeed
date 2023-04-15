@@ -13,7 +13,14 @@ public enum FeedImagesEndpoint {
     public func url(baseURL: URL) -> URL {
         switch self {
         case .get:
-            return baseURL.appendingPathComponent("/feed")
+            var components = URLComponents()
+            components.scheme = baseURL.scheme
+            components.host = baseURL.host
+            components.path = baseURL.path + "/feed"
+            components.queryItems = [
+                .init(name: "limit", value: "10")
+            ]
+            return components.url!
         }
     }
 }
