@@ -25,6 +25,10 @@ extension ListViewController {
         return refreshControl?.isRefreshing == true
     }
     
+    var loadMoreFeedErrorMessage: String? {
+        return loadMoreCell()?.message
+    }
+    
     var isShowingLoadMoreFeedIndicator: Bool {
         return loadMoreCell()?.isLoading == true
     }
