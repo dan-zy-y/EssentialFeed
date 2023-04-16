@@ -5,6 +5,7 @@
 //  Created by Daniil Zadorozhnyy on 25.10.2022.
 //
 
+import os
 import UIKit
 import CoreData
 import Combine
@@ -19,14 +20,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
     }()
     
+    private lazy var logger = Logger(subsystem: "com.essentialdeveloper.EssentialAppCaseStudy", category: "main")
+    
     private lazy var baseURL: URL = URL(string:"https://ile-api.essentialdeveloper.com/essential-feed/v1")!
     
     private lazy var store: FeedStore & FeedImageDataStore = {
-        try! CoreDataFeedStore(
-            storeURL: NSPersistentContainer
-                .defaultDirectoryURL()
-                .appendingPathComponent("feed-store.sqlite")
-        )
+        do {
+            return try CoreDataFeedStore(
+                storeURL: NSPersistentContainer
+                    .defaultDirectoryURL()
+                    .appendingPathComponent("feed-store.sqlite")
+            )
+        } catch {
+            assertionFailure("Failed to instantiate core data feed store with error \(error.localizedDescription)")
+            logger.fault("Failed to instantiate core data feed store with error \(error.localizedDescription)")
+            return NullStore()
+        }
     }()
     
     private lazy var localFeedLoader: LocalFeedLoader = {
@@ -127,11 +136,50 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         return localImageLoader
             .loadImageDataPublisher(from: url)
-            .fallback(to: { [httpClient] in
-                httpClient
+            .logCacheMisses(url: url, logger: logger)
+            .fallback(to: { [httpClient, logger] in
+                return httpClient
                     .getPublisher(url: url)
+                    .logElapsedTime(url: url, logger: logger)
+                    .logErrors(url: url, logger: logger)
                     .tryMap(FeedImageDataMapper.map)
                     .caching(to: localImageLoader, using: url)
             })
+    }
+}
+
+extension Publisher {
+    func logCacheMisses(url: URL, logger: Logger) -> AnyPublisher<Output, Failure> {
+        return handleEvents(receiveCompletion: { result in
+                if case .failure = result {
+                    logger.trace("Cache miss for url: \(url)")
+                }
+            }
+        )
+        .eraseToAnyPublisher()
+    }
+    
+    func logErrors(url: URL, logger: Logger) -> AnyPublisher<Output, Failure> {
+        return handleEvents(receiveCompletion: { result in
+                if case let .failure(error) = result {
+                    logger.trace("Failed to load url: \(url) with error \(error.localizedDescription)")
+                }
+            }
+        )
+        .eraseToAnyPublisher()
+    }
+    
+    func logElapsedTime(url: URL, logger: Logger) -> AnyPublisher<Output, Failure> {
+        var startTime = CACurrentMediaTime()
+        return handleEvents(
+            receiveSubscription: { _ in
+                logger.trace("Started loading url: \(url)")
+                startTime = CACurrentMediaTime()
+            }, receiveCompletion: { result in
+                let elapsed = CACurrentMediaTime() - startTime
+                logger.trace("Finished logging url: \(url) in \(elapsed) seconds")
+            }
+        )
+        .eraseToAnyPublisher()
     }
 }
