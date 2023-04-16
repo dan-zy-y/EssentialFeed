@@ -29,6 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     .appendingPathComponent("feed-store.sqlite")
             )
         } catch {
+            assertionFailure("Failed to instantiate core data feed store")
             return NullStore()
         }
     }()
