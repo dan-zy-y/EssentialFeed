@@ -9,24 +9,26 @@ import UIKit
 import EssentialFeed
 
 public final class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceErrorView {
-    private (set) public var errorView = ErrorView()
-    
-    public var onRefresh: (() -> Void)?
+    private(set) public var errorView = ErrorView()
     
     private lazy var dataSource: UITableViewDiffableDataSource<Int, CellController> = {
         .init(tableView: tableView) { (tableView, index, controller) in
-            return controller.dataSource.tableView(tableView, cellForRowAt: index)
+            controller.dataSource.tableView(tableView, cellForRowAt: index)
         }
     }()
+    
+    public var onRefresh: (() -> Void)?
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureErrorView()
+        configureTableView()
         refresh()
     }
     
-    private func configureErrorView() {
+    private func configureTableView() {
+        dataSource.defaultRowAnimation = .fade
+        tableView.dataSource = dataSource
         let container = UIView()
         container.backgroundColor = .clear
         container.addSubview(errorView)
@@ -50,19 +52,31 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        tableView.dataSource = dataSource
         tableView.sizeTableHeaderToFit()
+    }
+    
+    public override func traitCollectionDidChange(_ previous: UITraitCollection?) {
+        if previous?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+            tableView.reloadData()
+        }
     }
     
     @IBAction private func refresh() {
         onRefresh?()
     }
     
-    public func display(_ cellControllers: [CellController]) {
+    public func display(_ sections: [CellController]...) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, CellController>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(cellControllers, toSection: 0)
-        dataSource.applySnapshotUsingReloadData(snapshot)
+        sections.enumerated().forEach { section, cellControllers in
+            snapshot.appendSections([section])
+            snapshot.appendItems(cellControllers, toSection: section)
+        }
+        
+        if #available(iOS 15.0, *) {
+            dataSource.applySnapshotUsingReloadData(snapshot)
+        } else {
+            dataSource.apply(snapshot)
+        }
     }
     
     public func display(_ viewModel: ResourceLoadingViewModel) {
@@ -73,14 +87,19 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
         errorView.message = viewModel.message
     }
     
-    public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let dl = cellController(at: indexPath)?.delegate
-        dl?.tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
-    }
-    
     public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let dl = cellController(at: indexPath)?.delegate
         dl?.tableView?(tableView, didSelectRowAt: indexPath)
+    }
+    
+    public override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let dl = cellController(at: indexPath)?.delegate
+        dl?.tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
+    }
+    
+    public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let dl = cellController(at: indexPath)?.delegate
+        dl?.tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
     }
     
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
@@ -98,6 +117,6 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
     }
     
     private func cellController(at indexPath: IndexPath) -> CellController? {
-        return dataSource.itemIdentifier(for: indexPath)
+        dataSource.itemIdentifier(for: indexPath)
     }
 }
