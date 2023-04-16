@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		66021BD329EBFEC500BA3F49 /* NullStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66021BD229EBFEC500BA3F49 /* NullStore.swift */; };
 		669D4BBA29DE1CD600008AEC /* CommentsUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669D4BB929DE1CD600008AEC /* CommentsUIIntegrationTests.swift */; };
 		669D4BBC29DE1E9C00008AEC /* CommentsUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669D4BBB29DE1E9C00008AEC /* CommentsUIComposer.swift */; };
 		B0014E99290B2ACC0006C458 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0014E98290B2ACC0006C458 /* XCTestCase+MemoryLeakTracking.swift */; };
@@ -67,6 +68,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		66021BD229EBFEC500BA3F49 /* NullStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NullStore.swift; sourceTree = "<group>"; };
 		669D4BB929DE1CD600008AEC /* CommentsUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsUIIntegrationTests.swift; sourceTree = "<group>"; };
 		669D4BBB29DE1E9C00008AEC /* CommentsUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsUIComposer.swift; sourceTree = "<group>"; };
 		B0014E98290B2ACC0006C458 /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				B0F9A03429086F8300B54038 /* AppDelegate.swift */,
+				66021BD229EBFEC500BA3F49 /* NullStore.swift */,
 				B0DE43F4298FD559004701C0 /* CombineHelpers.swift */,
 				B0810D302924458800F61022 /* FeedUIComposer.swift */,
 				669D4BBB29DE1E9C00008AEC /* CommentsUIComposer.swift */,
@@ -305,6 +308,7 @@
 			files = (
 				B0F9A03929086F8300B54038 /* ViewController.swift in Sources */,
 				B0F9A03529086F8300B54038 /* AppDelegate.swift in Sources */,
+				66021BD329EBFEC500BA3F49 /* NullStore.swift in Sources */,
 				B0DE43F5298FD559004701C0 /* CombineHelpers.swift in Sources */,
 				B0810D342924458800F61022 /* FeedViewAdapter.swift in Sources */,
 				669D4BBC29DE1E9C00008AEC /* CommentsUIComposer.swift in Sources */,
