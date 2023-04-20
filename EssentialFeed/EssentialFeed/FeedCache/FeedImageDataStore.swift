@@ -27,6 +27,7 @@ public extension FeedImageDataStore {
         var result: InsertionResult!
         insert(data, for: url) {
             result = $0
+            group.leave()
         }
         group.wait()
         return try result.get()
