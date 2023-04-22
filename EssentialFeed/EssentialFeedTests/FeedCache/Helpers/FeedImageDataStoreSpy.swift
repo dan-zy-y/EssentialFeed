@@ -15,8 +15,8 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
     }
     
     private(set) var receivedMessages = [Message]()
-    private var retrievalResult: RetrievalResult?
-    private var insertionResult: InsertionResult?
+    private var retrievalResult: Result<Data?, Error>?
+    private var insertionResult: Result<Void, Error>?
     
     func insert(_ data: Data, for url: URL) throws {
         receivedMessages.append(.insert(data: data, for: url))
