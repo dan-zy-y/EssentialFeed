@@ -63,12 +63,12 @@ class LocalFeedImageDataFromCacheUseCaseTests: XCTestCase {
         )
     }
     
-    func test_save_requestsImageDataInsertionForURL() {
+    func test_save_requestsImageDataInsertionForURL() throws {
         let (sut, store) = makeSUT()
         
         let data = anyData()
         let url = anyURL()
-        sut.save(data, for: url) { _ in }
+        try sut.save(data, for: url)
         
         XCTAssertEqual(store.receivedMessages, [.insert(data: data, for: url)])
     }
