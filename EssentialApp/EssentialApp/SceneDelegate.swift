@@ -84,7 +84,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func sceneWillResignActive(_ scene: UIScene) {
-        localFeedLoader.validateCache()
+        localFeedLoader.validateCache() { _ in }
     }
     
     private func showComments(for image: FeedImage) {
