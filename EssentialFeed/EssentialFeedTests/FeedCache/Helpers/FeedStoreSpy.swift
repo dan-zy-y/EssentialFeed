@@ -16,9 +16,9 @@ class FeedStoreSpy: FeedStore {
     }
     
     private (set) var receivedMessages = [ReceivedMessage]()
-    var deletionResult: DeletionResult?
-    var insertionResult: InsertionResult?
-    var retrievalResult: RetrievalResult?
+    var deletionResult: Result<Void, Error>?
+    var insertionResult: Result<Void, Error>?
+    var retrievalResult: Result<CachedFeed?, Error>?
     
     func deleteCachedFeed() throws {
         receivedMessages.append(.deleteCacheFeed)
@@ -60,6 +60,6 @@ class FeedStoreSpy: FeedStore {
     }
     
     func completeRetrieval(with feed: [LocalFeedImage], timestamp: Date, at index: Int = 0) {
-        retrievalResult = .success(CachedFeed(feed: feed, timestamp: timestamp)) 
+        retrievalResult = .success(CachedFeed(feed: feed, timestamp: timestamp))
     }
 }
