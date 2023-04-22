@@ -16,11 +16,11 @@ class ValidateFeedCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [])
     }
     
-    func test_validateCahce_deletesCacheOnRetrievalError() {
+    func test_validateCache_deletesCacheOnRetrievalError() {
         let (sut, store) = makeSUT()
+        store.completeRetrieval(with: anyNSError())
         
         sut.validateCache()
-        store.completeRetrieval(with: anyNSError())
         
         XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCacheFeed])
     }
@@ -39,9 +39,9 @@ class ValidateFeedCacheUseCaseTests: XCTestCase {
         let fixesCurrentDate = Date()
         let nonExpiredTimestamp = fixesCurrentDate.minusFeedCacheMaxAge().adding(seconds: 1)
         let (sut, store) = makeSUT()
+        store.completeRetrieval(with: feed.local, timestamp: nonExpiredTimestamp)
         
         sut.validateCache()
-        store.completeRetrieval(with: feed.local, timestamp: nonExpiredTimestamp)
         
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
@@ -51,9 +51,9 @@ class ValidateFeedCacheUseCaseTests: XCTestCase {
         let fixesCurrentDate = Date()
         let expirationTimestamp = fixesCurrentDate.minusFeedCacheMaxAge()
         let (sut, store) = makeSUT()
+        store.completeRetrieval(with: feed.local, timestamp: expirationTimestamp)
         
         sut.validateCache()
-        store.completeRetrieval(with: feed.local, timestamp: expirationTimestamp)
         
         XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCacheFeed])
     }
@@ -63,9 +63,9 @@ class ValidateFeedCacheUseCaseTests: XCTestCase {
         let fixedCurrentDate = Date()
         let expiredTimestamp = fixedCurrentDate.minusFeedCacheMaxAge().adding(seconds: -1)
         let (sut, store) = makeSUT()
+        store.completeRetrieval(with: feed.local, timestamp: expiredTimestamp)
         
         sut.validateCache()
-        store.completeRetrieval(with: feed.local, timestamp: expiredTimestamp)
         
         XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCacheFeed])
     }
