@@ -16,14 +16,31 @@ class CacheFeedImageDataUseCaseTests: XCTestCase {
         XCTAssertTrue(store.receivedMessages.isEmpty)
     }
     
-    func test_save_requestsImageDataInsertionForURL() {
+    func test_saveImageDataForURL_requestsImageDataInsertionForURL() {
         let (sut, store) = makeSUT()
-        
-        let data = anyData()
         let url = anyURL()
-        sut.save(data, for: url) { _ in }
+        let data = anyData()
+        
+        try? sut.save(data, for: url)
         
         XCTAssertEqual(store.receivedMessages, [.insert(data: data, for: url)])
+    }
+    
+    func test_saveImageDataFromURL_failsOnStoreInsertionError() {
+        let (sut, store) = makeSUT()
+        
+        expect(sut, toCompleteWith: failed(), when: {
+            let insertionError = anyNSError()
+            store.completeInsertion(with: insertionError)
+        })
+    }
+    
+    func test_saveImageDataFromURL_succeedsOnSuccessfulStoreInsertion() {
+        let (sut, store) = makeSUT()
+        
+        expect(sut, toCompleteWith: .success(()), when: {
+            store.completeInsertionSuccessfully()
+        })
     }
     
     // MARK: - Helpers
@@ -39,5 +56,27 @@ class CacheFeedImageDataUseCaseTests: XCTestCase {
         trackMemoryLeaks(sut)
         
         return (sut, store)
+    }
+    
+    private func failed() -> Result<Void, Error> {
+        return .failure(LocalFeedImageDataLoader.SaveError.failed)
+    }
+    
+    private func expect(_ sut: LocalFeedImageDataLoader, toCompleteWith expectedResult: Result<Void, Error>, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+        action()
+        
+        let receivedResult = Result { try sut.save(anyData(), for: anyURL()) }
+        
+        switch (receivedResult, expectedResult) {
+        case (.success, .success):
+            break
+            
+        case (.failure(let receivedError as LocalFeedImageDataLoader.SaveError),
+              .failure(let expectedError as LocalFeedImageDataLoader.SaveError)):
+            XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+            
+        default:
+            XCTFail("Expected result \(expectedResult), got \(receivedResult) instead", file: file, line: line)
+        }
     }
 }
