@@ -20,14 +20,10 @@ public final class LocalFeedLoader: FeedCache {
 extension LocalFeedLoader {
     public typealias SaveResult = FeedCache.Result
     
-    public func save(_ feed: [FeedImage], completion: @escaping (SaveResult) -> Void) {
-        completion(
-            SaveResult {
-                try store.deleteCachedFeed()
-                try store.insert(feed.toLocal(), timestamp: currentDate())
-            }
-        )
-    }
+    public func save(_ feed: [FeedImage]) throws {
+        try store.deleteCachedFeed()
+        try store.insert(feed.toLocal(), timestamp: currentDate())
+    } 
 }
 
 extension LocalFeedLoader {
@@ -43,18 +39,21 @@ extension LocalFeedLoader {
     }
 }
 extension LocalFeedLoader {
+    public typealias ValidationResult = Result<Void, Error>
     
     private struct InvalidCache: Error {}
     
-    public func validateCache() {
-        do {
-            if let cache = try store.retrieve(),
-               !FeedCachePolicy.validate(cache.timestamp, against: self.currentDate()) {
-               throw InvalidCache()
+    public func validateCache(completion: @escaping (ValidationResult) -> Void) {
+        completion(ValidationResult {
+            do {
+                if let cache = try store.retrieve(),
+                   !FeedCachePolicy.validate(cache.timestamp, against: self.currentDate()) {
+                   throw InvalidCache()
+                }
+            } catch {
+                try store.deleteCachedFeed()
             }
-        } catch {
-            try? store.deleteCachedFeed()
-        }
+        })
     }
 }
 
